@@ -2032,7 +2032,8 @@
                     tagName = elt.tagName.toLowerCase().split('-'),
                     parent = elt.parentNode;
 
-                if (tagName[1] && (tagName[0] !== 'blocindicenum' || optionsBraille.codeBrailleMath === 'fr')) {
+                //why was there an exclusion for blocindicenum ? causing BNW-3407
+                if (tagName[1] && (tagName[0] !== '----blocindicenum____' || optionsBraille.codeBrailleMath === 'fr')) {
                     var boolFrChimie = optionsBraille.chimie && optionsBraille.codeBrailleMath === 'fr' && !mesFonctions.hasParent(elt, ['mmultiscripts-f', 'mmultiscripts']);
                     // var boolFrChimie = optionsBraille.chimie && optionsBraille.codeBrailleMath === 'fr' && !(elt.hasParent(['mmultiscripts-f', 'mmultiscripts']));
                     var txt = tagName[1].split(''),

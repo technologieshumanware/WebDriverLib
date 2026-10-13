@@ -22,58 +22,61 @@
     }
         </style>
 
-    <script>
+        <script>
 
-      // global vars
-      var TAG_ERROR = "merror";
-
-
-      function renderMathMl(math,doc){
-             math.typesetRoot = document.createElement('mjx-container');
-             math.typesetRoot.innerHTML = MathJax.startup.toMML(math.root);
-             math.typesetRoot.setAttribute('display', 'block');
-      }
-      MathJax = {
-       tex: {
-         inlineMath: [['$', '$'], ['\\(', '\\)']]
-        },
-
-        loader: {load: ['input/tex','a11y/semantic-enrich','output/chtml']},
-        startup: {
-            pageReady() {
-              MathJax._.mathjax.mathjax.handleRetriesFor(() => MathJax.startup.document.render());      
-              console.log("Page ready") 
-              // Page is ready, observe for the converted MathML node
-              checkErrors()
+            // global vars
+            var TAG_ERROR = "merror";
+            
+            function renderMathMl(math, doc) {
+                math.typesetRoot = document.createElement('mjx-container');
+                math.typesetRoot.innerHTML = MathJax.startup.toMML(math.root);
+                math.typesetRoot.setAttribute('display', 'block');
             }
-        },
-        options: {
-            sre: {
-                speech: 'shallow',  // one of: 'deep', 'shallow', or 'none'
-                locale: 'en'
-            },
-            renderActions: {
-                 typeset: [150,
-                 (doc) => {for (math of doc.math) {
-                     renderMathMl(math,doc);
-                 }},
-                 (math, doc) => {
-                     renderMathMl(math,doc);
-                 }
-                 ],
-                 enrich: {'[+]': [
-                    function (doc) {
-                        doc.enrich(true);
-                        console.log("math enrich whole doc");
-                    },
-                    function (math, doc) {
-                        math.enrich(doc, true);
+            MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']]
+                },
+
+                loader: { load: ['input/tex', 'a11y/semantic-enrich', 'output/chtml'] },
+                startup: {
+                    pageReady() {
+                        MathJax._.mathjax.mathjax.handleRetriesFor(() => MathJax.startup.document.render());
+                        console.log("Page ready")
+                        // Page is ready, observe for the converted MathML node
+                        checkErrors()
                     }
-                ]}
-            }
-        },
-     };
-    </script>
+                },
+                options: {
+                    sre: {
+                        speech: 'shallow',  // one of: 'deep', 'shallow', or 'none'
+                        locale: Intl.DateTimeFormat().resolvedOptions().locale || 'en'
+                    },
+                    renderActions: {
+                        typeset: [150,
+                            (doc) => {
+                                for (math of doc.math) {
+                                    renderMathMl(math, doc);
+                                }
+                            },
+                            (math, doc) => {
+                                renderMathMl(math, doc);
+                            }
+                        ],
+                        enrich: {
+                            '[+]': [
+                                function (doc) {
+                                    doc.enrich(true);
+                                    console.log("math enrich whole doc");
+                                },
+                                function (math, doc) {
+                                    math.enrich(doc, true);
+                                }
+                            ]
+                        }
+                    }
+                },
+            };
+        </script>
         <script>
 function checkErrors() {
 

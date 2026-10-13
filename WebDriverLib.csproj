@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net8.0-windows10.0.22621.0;net48</TargetFrameworks>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
@@ -22,14 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Humanware.NLogger_x64" Version="1.*" Condition="'$(Platform)' == 'x64'" />
-    <PackageReference Include="Humanware.NLogger_x86" Version="1.*" Condition="'$(Platform)' == 'x86'" />
+    <PackageReference Include="Humanware.NLogger_x64" Version="2.0.0.12" Condition="'$(Platform)' == 'x64'" />
+    <PackageReference Include="Humanware.NLogger_x86" Version="2.0.0.12" Condition="'$(Platform)' == 'x86'" />
     <PackageReference Include="NuGet.Build.Tasks.Pack" Version="6.14.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Selenium.WebDriver" Version="4.38.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="142.0.7444.5900" />
   </ItemGroup>
 
   <!-- Extract all .dll and .exe assemblies from net48 bin folder 
@@ -69,9 +68,13 @@
     <EmbeddedResource Remove="WebDriverLib\**" />
     <None Remove="WebDriverLib\**" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
     
   <ItemGroup>
-    <None Condition="Exists('SBOM.md')" Include="SBOM.md" Pack="true" PackagePath="SBOM.md"/>
+    <None Condition="Exists('SBOM.md')" Include="SBOM.md" Pack="true" PackagePath="SBOM.md" />
     <None Condition="Exists('THIRD-PARTY-NOTICES.txt')" Include="THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="THIRD-PARTY-NOTICES.txt" />
   </ItemGroup>
 
