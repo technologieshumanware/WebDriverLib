@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!-- This file is a helper to test and validate output of mathml2braille.js
+on the PC instead of device. Modify the mathml at will and load in the browser
+ Chrome://inspect is handy-->
+
+<head>
+    <style>@font-face {
+        font-family: "Quivira";
+        src: url('../Quivira.ttf');
+    }
+    .js-mathmlConverti {
+        font-family: 'Quivira';
+        color: red;
+    }
+    </style>
+
+<script type="text/javascript">
+    function getExpressionInBraille()
+    {
+        var result = "NOTHING";
+        var elements = document.getElementsByClassName('js-mathmlConverti');
+        //should be only one...
+        Array.prototype.forEach.call(elements,(element => {
+            console.log(element.innerHTML);
+            result = element.innerHTML;
+        }));
+
+        return result;
+
+    }
+
+</script>
+
+</head>
+<body>
+
+<div>
+<h2>Empty expression</h2>
+<p>
+<math  class="js-math2braille" xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+<mrow>
+</mrow>
+</math>
+</p>
+</div>
+
+<div>
+<h2>Empty expression 2</h2>
+<p>
+<math  class="js-math2braille" xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+
+</math>
+</p>
+</div>
+
+
+
+<!-- Put the mathml here below and tag it with class="js-math2braille"-->
+<div>
+<h2>Minus one third Root of the quantity x plus 1</h2>
+<p>
+<math  class="js-math2braille" xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+<mrow>
+	<mroot>
+		<mrow>
+			<mi>x</mi>
+			<mo>+</mo>
+			<mi>1</mi>
+		</mrow>
+		<mrow>
+			<mfrac>
+				<mrow>
+				<mi>−1</mi>
+				</mrow>
+				<mrow>
+				<mi>3</mi>
+				</mrow>
+				
+			</mfrac>
+		</mrow>
+	</mroot>
+</mrow>
+</math>
+
+<math class="js-math2braille" xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+<mroot>
+	<mrow>
+		<mi>x</mi><mo>+</mo><mn>1</mn>
+	</mrow>
+	<mrow>
+		<mfrac><mn>-1</mn><mn>3</mn></mfrac>
+	</mrow>
+</mroot></math>
+</p>
+</div>
+
+
+<div>
+<h2>Semantics (MathML tag - with content markup annotation)</h2>
+<math class="js-math2braille" xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+<mrow>
+<semantics>
+  <mrow>
+    <msubsup>
+      <mo>∫</mo>
+      <mn>1</mn>
+      <mi>t</mi>
+    </msubsup>
+    <mfrac>
+      <mrow>
+        <mo>ⅆ</mo>
+        <mi>x</mi>
+      </mrow>
+      <mi>x</mi>
+    </mfrac>
+  </mrow>
+  <annotation-xml encoding="MathML-Content">
+    <apply>
+      <int></int>
+      <bvar><ci>x</ci></bvar>
+      <lowlimit><cn>1</cn></lowlimit>
+      <uplimit><ci>t</ci></uplimit>
+      <apply>
+        <divide></divide>
+        <cn>1</cn>
+        <ci>x</ci>
+      </apply>
+    </apply>
+  </annotation-xml>
+</semantics>
+</mrow>
+</math>
+</div>
+
+<div>
+<h2>E Equals MC Squared in Table</h2>
+<p>
+<math class="js-math2braille" xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+<mtable>
+  <mlabeledtr id="e-is-m-c-square">
+  	<mtd>
+  	<mtext></mtext>
+  	</mtd>
+      <mrow>
+       <mi>E</mi>
+       <mo>=</mo>
+       <mrow>
+       <mtd>
+        <mi>m</mi>
+        <mo>⁢<!--INVISIBLE TIMES--></mo>
+        <msup>
+         <mi>c</mi>
+         <mn>2</mn>
+        </msup>
+        </mtd></mrow>
+     </mrow>
+    
+  </mlabeledtr>
+</mtable>
+</math>
+</p>
+</div>
+
+<div>
+<h2>Minus one third Root of the quantity x plus 1</h2>
+<p>
+<math  class="js-math2braille" xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+<mrow>
+	<mroot>
+		<mrow>
+		<mi>x</mi>
+		<mo>+</mo>
+		<mi>1</mi>
+		</mrow>
+		<mn>
+			<mfrac>
+				<mrow>
+				<mi>−1</mi>
+				</mrow>
+				<mrow>
+				<mi>3</mi>
+				</mrow>
+				
+			</mfrac>
+		</mn>
+	</mroot>
+</mrow>
+</math>
+</p>
+</div>
+
+<!--That one comes from MathJax online demo -->
+<div>
+    <math class="js-math2braille" xmlns="http://www.w3.org/1998/Math/MathML" display="block" data-semantic-type="punctuated" data-semantic-role="endpunct" data-semantic-id="26" data-semantic-children="25,24" data-semantic-content="24" data-semantic-speech="x equals StartFraction negative b plus or minus StartRoot b squared minus 4 a c EndRoot Over 2 a EndFraction period">
+        <mrow data-semantic-type="relseq" data-semantic-role="equality" data-semantic-id="25" data-semantic-children="0,23" data-semantic-content="1" data-semantic-parent="26">
+            <mi data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple" data-semantic-id="0" data-semantic-parent="25">x</mi>
+            <mo data-semantic-type="relation" data-semantic-role="equality" data-semantic-id="1" data-semantic-parent="25" data-semantic-operator="relseq,=">=</mo>
+            <mrow data-mjx-texclass="ORD">
+                <mfrac data-semantic-type="fraction" data-semantic-role="division" data-semantic-id="23" data-semantic-children="18,22" data-semantic-parent="25">
+                    <mrow data-semantic-type="infixop" data-semantic-role="addition" data-semantic-id="18" data-semantic-children="17,16" data-semantic-content="4" data-semantic-parent="23">
+                        <mrow data-semantic-type="prefixop" data-semantic-role="negative" data-semantic-annotation="clearspeak:simple" data-semantic-id="17" data-semantic-children="3" data-semantic-content="2" data-semantic-parent="18">
+                            <mo data-semantic-type="operator" data-semantic-role="subtraction" data-semantic-id="2" data-semantic-parent="17" data-semantic-operator="prefixop,&#x2212;">&#x2212;</mo>
+                            <mi data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple" data-semantic-id="3" data-semantic-parent="17">b</mi>
+                        </mrow>
+                        <mo data-semantic-type="operator" data-semantic-role="addition" data-semantic-id="4" data-semantic-parent="18" data-semantic-operator="infixop,&#xB1;">&#xB1;</mo>
+                        <msqrt data-semantic-type="sqrt" data-semantic-role="unknown" data-semantic-id="16" data-semantic-children="15" data-semantic-parent="18">
+                            <mrow data-semantic-type="infixop" data-semantic-role="subtraction" data-semantic-id="15" data-semantic-children="7,14" data-semantic-content="8" data-semantic-parent="16">
+                                <msup data-semantic-type="superscript" data-semantic-role="latinletter" data-semantic-id="7" data-semantic-children="5,6" data-semantic-parent="15">
+                                    <mi data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple" data-semantic-id="5" data-semantic-parent="7">b</mi>
+                                    <mn data-semantic-type="number" data-semantic-role="integer" data-semantic-font="normal" data-semantic-annotation="clearspeak:simple" data-semantic-id="6" data-semantic-parent="7">2</mn>
+                                </msup>
+                                <mo data-semantic-type="operator" data-semantic-role="subtraction" data-semantic-id="8" data-semantic-parent="15" data-semantic-operator="infixop,&#x2212;">&#x2212;</mo>
+                                <mrow data-semantic-type="infixop" data-semantic-role="implicit" data-semantic-annotation="clearspeak:simple;clearspeak:unit" data-semantic-id="14" data-semantic-children="9,10,11" data-semantic-content="12,13" data-semantic-parent="15">
+                                    <mn data-semantic-type="number" data-semantic-role="integer" data-semantic-font="normal" data-semantic-annotation="clearspeak:simple" data-semantic-id="9" data-semantic-parent="14">4</mn>
+                                    <mo data-semantic-type="operator" data-semantic-role="multiplication" data-semantic-id="12" data-semantic-parent="14" data-semantic-added="true" data-semantic-operator="infixop,&#x2062;">&#x2062;</mo>
+                                    <mi data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple" data-semantic-id="10" data-semantic-parent="14">a</mi>
+                                    <mo data-semantic-type="operator" data-semantic-role="multiplication" data-semantic-id="13" data-semantic-parent="14" data-semantic-added="true" data-semantic-operator="infixop,&#x2062;">&#x2062;</mo>
+                                    <mi data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple" data-semantic-id="11" data-semantic-parent="14">c</mi>
+                                </mrow>
+                            </mrow>
+                        </msqrt>
+                    </mrow>
+                    <mrow data-semantic-type="infixop" data-semantic-role="implicit" data-semantic-annotation="clearspeak:simple;clearspeak:unit" data-semantic-id="22" data-semantic-children="19,20" data-semantic-content="21" data-semantic-parent="23">
+                        <mn data-semantic-type="number" data-semantic-role="integer" data-semantic-font="normal" data-semantic-annotation="clearspeak:simple" data-semantic-id="19" data-semantic-parent="22">2</mn>
+                        <mo data-semantic-type="operator" data-semantic-role="multiplication" data-semantic-id="21" data-semantic-parent="22" data-semantic-added="true" data-semantic-operator="infixop,&#x2062;">&#x2062;</mo>
+                        <mi data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple" data-semantic-id="20" data-semantic-parent="22">a</mi>
+                    </mrow>
+                </mfrac>
+            </mrow>
+        </mrow>
+    </math>
+</div>
+
+
+
+<!--Fourier series from OfficeMath -->
+
+<div>
+    <math class="js-math2braille" xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>f</mi><mfenced separators="|"><mrow><mi>x</mi></mrow></mfenced><mo>=</mo><msub><mrow><mi>a</mi></mrow><mrow><mn>0</mn></mrow></msub><mo>+</mo><munderover><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>∞</mi></mrow></munderover><mrow><mfenced separators="|"><mrow><msub><mrow><mi>a</mi></mrow><mrow><mi>n</mi></mrow></msub><mrow><mrow><mi>cos</mi></mrow><mo>⁡</mo><mrow><mfrac><mrow><mi mathvariant="italic">nπx</mi></mrow><mrow><mi>L</mi></mrow></mfrac></mrow></mrow><mo>+</mo><msub><mrow><mi>b</mi></mrow><mrow><mi>n</mi></mrow></msub><mrow><mrow><mi>sin</mi></mrow><mo>⁡</mo><mrow><mfrac><mrow><mi mathvariant="italic">nπx</mi></mrow><mrow><mi>L</mi></mrow></mfrac></mrow></mrow></mrow></mfenced></mrow></math>
+
+</div>
+
+<script type="text/javascript" src='../FrenchTables.js' ></script>
+<script type="text/javascript" src='../NemethTables.js' ></script>
+<script type="text/javascript" src='../UEBTables.js' ></script>
+<script type="text/javascript" src='../mathml2braille.js' ></script>
+<script>
+        var options1 = {
+			'codeBrailleMath': 'ueb', // 3 options : "fr", "nemeth" et "ueb". "fr" par defaut
+			'maxCaracCell': 14 //correspond à peu près au nombre limite de carac dans la cellule avant de basculer en mode linéaire (10 par défaut)
+		};
+
+           new Mathml2braille('.js-math2braille',options1);
+
+           console.log("created Mathml2braille");
+
+    </script>
+
+
+</body>
+</html>

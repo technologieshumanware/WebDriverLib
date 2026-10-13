@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <style>@font-face {
+        font-family: "Quivira";
+        src: url('Quivira.ttf');
+    }
+    .js-mathmlConverti {
+        font-family: 'Quivira';
+        color: red;
+    }
+    </style>
+
+<script type="text/javascript">
+    function getExpressionInBraille()
+    {
+        var result = "NOTHING";
+        var elements = document.getElementsByClassName('js-mathmlConverti');
+        //should be only one...
+		for (const element of elements)
+        {
+            console.log(element.innerHTML);
+            result = element.innerHTML;
+			//return the first element found that is not empty
+			//BNW-2693
+			if (result.length != 0)
+			{
+				return result;
+			}
+       }
+	   //however, if we still arrive here after not finding anything relevant
+	   //empty expression is legit case
+	   if (elements.size > 0)
+	   {
+			return "";
+	   }
+	
+
+       return result;
+
+    }
+
+    function terminate()
+    {
+      window.open('','_self').close()
+    }
+
+</script>
+
+</head>
+<body>
+
+<!-- a placeholder that will contain the chunk of mathml that we want to get translated -->
+<!-- <div>@@MathMLPlaceHolder@@</div>  -->
+<div id="MathMLPlaceHolder"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" class="js-math2braille">
+    <mrow>
+      <mi>x</mi>
+      <mo>=</mo>
+      <mfrac>
+        <mrow>
+          <mrow>
+            <mo>-</mo>
+            <mi>b</mi>
+          </mrow>
+          <mo>±</mo>
+          <msqrt>
+            <mrow>
+              <msup>
+                <mi>b</mi>
+                <mn>2</mn>
+              </msup>
+              <mo>-</mo>
+              <mrow>
+                <mn>4</mn>
+                <mo>⁢</mo>
+                <mi>a</mi>
+                <mo>⁢</mo>
+                <mi>c</mi>
+              </mrow>
+            </mrow>
+          </msqrt>
+        </mrow>
+        <mrow>
+          <mn>2</mn>
+          <mo>⁢</mo>
+          <mi>a</mi>
+        </mrow>
+      </mfrac>
+    </mrow>
+    </math></div>
+
+
+<script type="text/javascript" src='FrenchTables.js' ></script>
+<script type="text/javascript" src='NemethTables.js' ></script>
+<script type="text/javascript" src='UEBTables.js' ></script>
+<script type="text/javascript" src='mathml2braille.js' ></script>
+
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-windows10.0.22621.0;net48</TargetFrameworks>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <OutputType>Library</OutputType>
+    <AssemblyName>WebDriverLib</AssemblyName>
+    <RootNamespace>WebDriverLib</RootNamespace>
+    <ProjectGuid>{DA82D1D1-D758-42AA-8D51-CA9BB443D43B}</ProjectGuid>
+    <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>12.0</LangVersion>
+    <SupportedOSPlatformVersion>10.0.22621.0</SupportedOSPlatformVersion>
+    <Platforms>x64;x86</Platforms>
+    <Configurations>Debug;Release;ReleaseTests</Configurations>
+    <Authors>Technologies Humanware</Authors>
+    <Company>Technologies Humanware</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Humanware.NLogger_x64" Version="1.*" Condition="'$(Platform)' == 'x64'" />
+    <PackageReference Include="Humanware.NLogger_x86" Version="1.*" Condition="'$(Platform)' == 'x86'" />
+    <PackageReference Include="NuGet.Build.Tasks.Pack" Version="6.14.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Selenium.WebDriver" Version="4.38.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="142.0.7444.5900" />
+  </ItemGroup>
+
+  <!-- Extract all .dll and .exe assemblies from net48 bin folder 
+       and pack them in a single directory that can be used by NVDA addon
+       inside the nuget package -->
+  <PropertyGroup Condition="'$(TargetFramework)|$(Configuration)' == 'net48|Release'">
+    <_DllPackDir>$(ProjectDir)bin\Net48Pack\</_DllPackDir>
+  </PropertyGroup>
+
+  <Target Name="CopyNet48DllsForPacking" AfterTargets="Build" Condition="'$(TargetFramework)|$(Configuration)' == 'net48|Release'">
+    <MakeDir Directories="$(_DllPackDir)" />
+    <ItemGroup>
+        <_DllsToCopy Include="$(OutputPath)*.dll;$(OutputPath)\**\*.exe" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_DllsToCopy)" DestinationFolder="$(_DllPackDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <None Include="$(ProjectDir)bin\Net48Pack\*" Pack="true" PackagePath="addon\" />
+  </ItemGroup>
+
+  <!-- Include Resources directory when packing nuget -->
+  <ItemGroup>
+    <Content Include="Resources\**">
+        <Pack>true</Pack>
+        <PackagePath>contentFiles\any\any\Resources;content\Resources;addon\Resources</PackagePath>
+        <IncludeInPackage>true</IncludeInPackage>
+        <BuildAction>Content</BuildAction>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="WebDriverLib\**" />
+    <EmbeddedResource Remove="WebDriverLib\**" />
+    <None Remove="WebDriverLib\**" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <None Condition="Exists('SBOM.md')" Include="SBOM.md" Pack="true" PackagePath="SBOM.md"/>
+    <None Condition="Exists('THIRD-PARTY-NOTICES.txt')" Include="THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="THIRD-PARTY-NOTICES.txt" />
+  </ItemGroup>
+
+</Project>

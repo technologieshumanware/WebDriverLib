@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <style type="text/css">
+    @font-face { font-family: 'verdana';
+    src:url("Quivira.ttf") }
+
+    @font-face { font-family: 'STIXGeneral';
+    src:url("Quivira.ttf") }
+
+    p{ font-family: 'verdana';
+    font-size:18pt;
+    line-height: 20pt;
+    text-align: left;
+    margin:0px;
+    }
+
+    mjx-container[display="block"] {
+      display: block;
+      margin: 1em 0;
+    }
+        </style>
+
+    <script>
+
+      // global vars
+      var TAG_ERROR = "merror";
+
+
+      function renderMathMl(math,doc){
+             math.typesetRoot = document.createElement('mjx-container');
+             math.typesetRoot.innerHTML = MathJax.startup.toMML(math.root);
+             math.typesetRoot.setAttribute('display', 'block');
+      }
+      MathJax = {
+       tex: {
+         inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+
+        loader: {load: ['input/tex','a11y/semantic-enrich','output/chtml']},
+        startup: {
+            pageReady() {
+              MathJax._.mathjax.mathjax.handleRetriesFor(() => MathJax.startup.document.render());      
+              console.log("Page ready") 
+              // Page is ready, observe for the converted MathML node
+              checkErrors()
+            }
+        },
+        options: {
+            sre: {
+                speech: 'shallow',  // one of: 'deep', 'shallow', or 'none'
+                locale: 'en'
+            },
+            renderActions: {
+                 typeset: [150,
+                 (doc) => {for (math of doc.math) {
+                     renderMathMl(math,doc);
+                 }},
+                 (math, doc) => {
+                     renderMathMl(math,doc);
+                 }
+                 ],
+                 enrich: {'[+]': [
+                    function (doc) {
+                        doc.enrich(true);
+                        console.log("math enrich whole doc");
+                    },
+                    function (math, doc) {
+                        math.enrich(doc, true);
+                    }
+                ]}
+            }
+        },
+     };
+    </script>
+        <script>
+function checkErrors() {
+
+      // No mathml object ==> try to use tex2chtml to find error
+      var input = document.getElementById("MathJaxInput").innerHTML;
+
+      MathJax.tex2chtmlPromise(input).then(function (node) {
+
+	   var errorNode = node.getElementsByTagName(TAG_ERROR)
+
+		if (errorNode.length > 0) {
+		    var errorMessage = errorNode[0].textContent
+		    console.log("checkErrors: " + errorMessage)
+		}
+
+      });
+    }
+  </script>
+    <script id="MathJax-script" src="startup.js"/>
+    <script type="text/javascript">
+        function getConvertedTex() {
+            var result = "NOTHING";
+            var mathNodes = document.getElementsByTagName('mjx-container');
+
+            //There is only one expression to be converted at a time
+            if (mathNodes.length != 0) {
+
+                // Remove aria-hidden attribute to make MathML visible to screen readers
+                var mathNode = mathNodes[0].getElementsByTagName("math")[0];
+                mathNode.removeAttribute("aria-hidden");
+
+                // Invisible times operators must be removed,
+                // MathJax does not display them, but MS Word does.
+                var moElements = mathNodes[0].getElementsByTagName("mo");
+                for (let element of moElements) {
+                    if (element.textContent == '\u2062') {
+                        element.remove();
+                    }
+                }
+                result = mathNodes[0].innerHTML;
+            }
+            return result;
+        }
+
+        function getTTSText() {
+
+            var mathElements = document.getElementsByTagName('mjx-container');
+
+
+            if (mathElements.length == 0)
+                return "####Page not ready####";
+
+            var mathElement = mathElements[0];
+
+
+            // Get the enriched text for TTS
+            var ttsText = mathElement.getAttribute('aria-label');
+            return ttsText;
+        }
+
+        function isJaxErrors(node) {
+            var result = false;
+            var errorMessage = "";
+
+            var errorNode = node.getElementsByTagName(TAG_ERROR)
+
+            if (errorNode.length > 0) {
+                errorMessage = errorNode[0].textContent
+                result = true
+            }
+            return [result, errorMessage];
+        }
+
+    </script>
+</head>
+    <body>
+        <div id="MathJaxInput">
+            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mrow>
+            <mi>x</mi>
+            <mo>=</mo>
+            <mfrac>
+                <mrow>
+                <mrow>
+                    <mo>-</mo>
+                    <mi>b</mi>
+                </mrow>
+                <mo>±</mo>
+                <msqrt>
+                    <mrow>
+                    <msup>
+                        <mi>b</mi>
+                        <mn>2</mn>
+                    </msup>
+                    <mo>-</mo>
+                    <mrow>
+                        <mn>4</mn>
+                        <mo>⁢</mo>
+                        <mi>a</mi>
+                        <mo>⁢</mo>
+                        <mi>c</mi>
+                    </mrow>
+                    </mrow>
+                </msqrt>
+                </mrow>
+                <mrow>
+                <mn>2</mn>
+                <mo>⁢</mo>
+                <mi>a</mi>
+                </mrow>
+            </mfrac>
+            </mrow>
+            </math>
+        </div>
+    </body>
+</html>
